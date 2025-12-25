@@ -1,4 +1,6 @@
+// src/contexts/AuthContext.tsx
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { authAPI } from '@/utils/api';
 
 export interface User {
   id: string;
@@ -13,109 +15,118 @@ export interface User {
 
 interface AuthContextType {
   user: User | null;
+  setUser: React.Dispatch<React.SetStateAction<User | null>>;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
   register: (userData: Omit<User, 'id'> & { password: string }) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// Demo users for testing
-const DEMO_USERS: (User & { password: string })[] = [
-  {
-    id: '1',
-    name: 'Student User',
-    email: 'student@test.com',
-    password: 'password',
-    class: 11,
-    rollNumber: 'STU001',
-    role: 'student',
-    qodStreak: 5,
-    totalPoints: 250,
-  },
-  {
-    id: '2',
-    name: 'Admin User',
-    email: 'admin@test.com',
-    password: 'password',
-    class: 12,
-    rollNumber: 'ADM001',
-    role: 'admin',
-    qodStreak: 0,
-    totalPoints: 0,
-  },
-];
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    // Check for existing session
-    const storedUser = localStorage.getItem('mathquiz_user');
+ useEffect(() => {
+  const initAuth = async () => {
+    const token = localStorage.getItem("mathquiz_token");
+    const storedUser = localStorage.getItem("mathquiz_user");
+
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+
+    if (token) {
+      try {
+        const response = await authAPI.getProfile();
+        if (response.data.success) {
+          setUser(response.data.user);
+          localStorage.setItem(
+            "mathquiz_user",
+            JSON.stringify(response.data.user)
+          );
+        }
+      } catch (error) {
+        console.error("Auth init failed:", error);
+        localStorage.removeItem("mathquiz_token");
+        localStorage.removeItem("mathquiz_user");
+        setUser(null);
+      }
+    }
+
     setIsLoading(false);
-  }, []);
+  };
+
+  initAuth();
+}, []);
 
   const login = async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
-    // Check demo users first
-    const demoUser = DEMO_USERS.find(u => u.email === email && u.password === password);
-    if (demoUser) {
-      const { password: _, ...userWithoutPassword } = demoUser;
-      setUser(userWithoutPassword);
-      localStorage.setItem('mathquiz_user', JSON.stringify(userWithoutPassword));
-      return { success: true };
+    try {
+      const response = await authAPI.login({ email, password });
+      
+      if (response.data.success) {
+        const { token, user: userData } = response.data;
+        localStorage.setItem('mathquiz_token', token);
+        localStorage.setItem('mathquiz_user', JSON.stringify(userData));
+        setUser(userData);
+        return { success: true };
+      }
+      
+      return { success: false, error: 'Login failed' };
+    } catch (error: any) {
+      console.error('Login error:', error);
+      return { 
+        success: false, 
+        error: error.response?.data?.message || 'Invalid email or password' 
+      };
     }
-
-    // Check localStorage for registered users
-    const users = JSON.parse(localStorage.getItem('mathquiz_users') || '[]');
-    const foundUser = users.find((u: User & { password: string }) => u.email === email && u.password === password);
-    
-    if (foundUser) {
-      const { password: _, ...userWithoutPassword } = foundUser;
-      setUser(userWithoutPassword);
-      localStorage.setItem('mathquiz_user', JSON.stringify(userWithoutPassword));
-      return { success: true };
-    }
-
-    return { success: false, error: 'Invalid email or password' };
   };
 
-  const register = async (userData: Omit<User, 'id'> & { password: string }): Promise<{ success: boolean; error?: string }> => {
-    const users = JSON.parse(localStorage.getItem('mathquiz_users') || '[]');
-    
-    // Check if email already exists
-    if (users.some((u: User) => u.email === userData.email) || DEMO_USERS.some(u => u.email === userData.email)) {
-      return { success: false, error: 'Email already registered' };
+  const register = async (userData: Omit<User, 'id'> & { password: string }): 
+  Promise<{ success: boolean; error?: string }> => {
+  try {
+    const response = await authAPI.register(userData);
+
+    if (response.data.success) {
+      const { token, user: newUser } = response.data;
+
+      localStorage.setItem("mathquiz_token", token);
+      localStorage.setItem("mathquiz_user", JSON.stringify(newUser));
+      setUser(newUser);
+
+      return { success: true };
     }
 
-    const newUser = {
-      ...userData,
-      id: Date.now().toString(),
-      qodStreak: 0,
-      totalPoints: 0,
+    return { success: false, error: "Registration failed" };
+  } catch (error: any) {
+    console.error("Registration error:", error);
+    return {
+      success: false,
+      error: error.response?.data?.message || "Registration failed",
     };
-
-    users.push(newUser);
-    localStorage.setItem('mathquiz_users', JSON.stringify(users));
-
-    const { password: _, ...userWithoutPassword } = newUser;
-    setUser(userWithoutPassword);
-    localStorage.setItem('mathquiz_user', JSON.stringify(userWithoutPassword));
-
-    return { success: true };
-  };
+  }
+};
 
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem('mathquiz_user');
+   setUser(null);
+  localStorage.removeItem("mathquiz_token");
+  localStorage.removeItem("mathquiz_user");
   };
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, register, logout }}>
+    <AuthContext.Provider
+  value={{
+    user,
+    setUser,
+    isLoading,
+    login,
+    register,
+    logout,
+  }}
+>
+
       {children}
     </AuthContext.Provider>
   );
