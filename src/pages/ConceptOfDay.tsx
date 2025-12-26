@@ -133,7 +133,7 @@ export default function ConceptOfDay() {
               </h2>
             </div>
             <div className="p-6 md:p-8 text-base md:text-lg leading-relaxed">
-              <MathRenderer text={concept.formula} />
+              <MathRenderer text={concept.formula} block />
             </div>
           </div>
 

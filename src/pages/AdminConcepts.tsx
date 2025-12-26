@@ -1,5 +1,7 @@
 // src/pages/AdminConcepts.tsx
 import { useEffect, useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MathRenderer } from "@/components/MathRenderer";
 import { useNavigate } from "react-router-dom";
 import { Navbar } from "@/components/layout/Navbar";
 import { Button } from "@/components/ui/button";
@@ -43,7 +45,7 @@ export default function AdminConcepts() {
   const [concepts, setConcepts] = useState<Concept[]>([]);
   const [filterClass, setFilterClass] = useState<string>("all");
   const [editingId, setEditingId] = useState<string | null>(null);
-
+  const [activeTab, setActiveTab] = useState<"write" | "preview">("write");
   const [formData, setFormData] = useState({
     title: "",
     formula: "",
@@ -138,9 +140,7 @@ export default function AdminConcepts() {
       await loadConcepts(filterClass);
     } catch (err: any) {
       console.error("Save concept error:", err);
-      toast.error(
-        err.response?.data?.message || "Failed to save concept"
-      );
+      toast.error(err.response?.data?.message || "Failed to save concept");
     } finally {
       setSaving(false);
     }
@@ -202,126 +202,186 @@ export default function AdminConcepts() {
 
         {/* Form */}
         <div className="bg-card rounded-2xl shadow-lg p-6 mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="font-semibold text-lg">
-              {editingId ? "Edit Concept" : "Create New Concept"}
-            </h2>
-            {editingId && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={resetForm}
-              >
-                Cancel Edit
-              </Button>
-            )}
-          </div>
+          <Tabs
+            value={activeTab}
+            onValueChange={(v) => setActiveTab(v as any)}
+            className="mb-6"
+          >
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="write">Write</TabsTrigger>
+              <TabsTrigger value="preview">Preview</TabsTrigger>
+            </TabsList>
 
-          <div className="grid md:grid-cols-2 gap-4">
-            <div>
-              <Label>Title *</Label>
-              <Input
-                value={formData.title}
-                onChange={(e) =>
-                  setFormData({ ...formData, title: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <Label>Class *</Label>
-              <Select
-                value={formData.class}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, class: value })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select class" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="11">Class 11</SelectItem>
-                  <SelectItem value="12">Class 12</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label>Chapter *</Label>
-              <Input
-                value={formData.chapter}
-                onChange={(e) =>
-                  setFormData({ ...formData, chapter: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <Label>Topic *</Label>
-              <Input
-                value={formData.topic}
-                onChange={(e) =>
-                  setFormData({ ...formData, topic: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <Label>Scheduled Date *</Label>
-              <div className="flex items-center gap-2">
-                <Calendar className="w-4 h-4 text-muted-foreground" />
-                <Input
-                  type="date"
-                  value={formData.scheduledDate}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      scheduledDate: e.target.value,
-                    })
-                  }
-                />
-              </div>
-            </div>
-            <div>
-              <Label>Example (optional)</Label>
-              <Input
-                value={formData.example}
-                onChange={(e) =>
-                  setFormData({ ...formData, example: e.target.value })
-                }
-              />
-            </div>
-            <div className="md:col-span-2">
-              <Label>Formula / Concept (supports LaTeX)</Label>
-              <Input
-                value={formData.formula}
-                onChange={(e) =>
-                  setFormData({ ...formData, formula: e.target.value })
-                }
-                placeholder="e.g. a^2 + b^2 = c^2"
-              />
-            </div>
-            <div className="md:col-span-2">
-              <Label>Explanation *</Label>
-              <textarea
-                className="w-full rounded-md border bg-background p-2 text-sm"
-                rows={3}
-                value={formData.explanation}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    explanation: e.target.value,
-                  })
-                }
-              />
-            </div>
-          </div>
-
-          <div className="mt-4 flex justify-end">
-            <Button onClick={handleSubmit} disabled={saving}>
-              {saving && (
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-semibold text-lg">
+                {editingId ? "Edit Concept" : "Create New Concept"}
+              </h2>
+              {editingId && (
+                <Button variant="outline" size="sm" onClick={resetForm}>
+                  Cancel Edit
+                </Button>
               )}
-              <Plus className="w-4 h-4 mr-2" />
-              {editingId ? "Update Concept" : "Create Concept"}
-            </Button>
-          </div>
+            </div>
+            <TabsContent value="write">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <Label>Title *</Label>
+                  <Input
+                    value={formData.title}
+                    onChange={(e) =>
+                      setFormData({ ...formData, title: e.target.value })
+                    }
+                  />
+                </div>
+                <div>
+                  <Label>Class *</Label>
+                  <Select
+                    value={formData.class}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, class: value })
+                    }
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select class" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="11">Class 11</SelectItem>
+                      <SelectItem value="12">Class 12</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Chapter *</Label>
+                  <Input
+                    value={formData.chapter}
+                    onChange={(e) =>
+                      setFormData({ ...formData, chapter: e.target.value })
+                    }
+                  />
+                </div>
+                <div>
+                  <Label>Topic *</Label>
+                  <Input
+                    value={formData.topic}
+                    onChange={(e) =>
+                      setFormData({ ...formData, topic: e.target.value })
+                    }
+                  />
+                </div>
+                <div>
+                  <Label>Scheduled Date *</Label>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4 text-muted-foreground" />
+                    <Input
+                      type="date"
+                      value={formData.scheduledDate}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          scheduledDate: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label>Example (optional)</Label>
+                  <Input
+                    value={formData.example}
+                    onChange={(e) =>
+                      setFormData({ ...formData, example: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <Label>Formula / Concept (supports LaTeX)</Label>
+                  <Input
+                    value={formData.formula}
+                    onChange={(e) =>
+                      setFormData({ ...formData, formula: e.target.value })
+                    }
+                    placeholder="e.g. a^2 + b^2 = c^2"
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <Label>Explanation *</Label>
+                  <textarea
+                    className="w-full rounded-md border bg-background p-2 text-sm"
+                    rows={3}
+                    value={formData.explanation}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        explanation: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="mt-4 flex justify-end">
+                <Button onClick={handleSubmit} disabled={saving}>
+                  {saving && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                  <Plus className="w-4 h-4 mr-2" />
+                  {editingId ? "Update Concept" : "Create Concept"}
+                </Button>
+              </div>
+            </TabsContent>
+            <TabsContent value="preview">
+              <div className="bg-card rounded-2xl shadow-lg p-6 space-y-6">
+                <h2 className="font-semibold text-lg">Live Preview</h2>
+
+                {formData.title && (
+                  <h1 className="text-2xl font-bold">{formData.title}</h1>
+                )}
+
+                <div className="flex flex-wrap gap-2 text-sm">
+                  {formData.class && (
+                    <span className="px-3 py-1 rounded-full bg-primary/10 text-primary">
+                      Class {formData.class}
+                    </span>
+                  )}
+                  {formData.chapter && (
+                    <span className="px-3 py-1 rounded-full bg-secondary">
+                      {formData.chapter}
+                    </span>
+                  )}
+                  {formData.topic && (
+                    <span className="px-3 py-1 rounded-full bg-accent/10 text-accent">
+                      {formData.topic}
+                    </span>
+                  )}
+                </div>
+
+                {formData.formula && (
+                  <div className="rounded-xl border p-4">
+                    <h3 className="font-semibold mb-2">Formula / Concept</h3>
+                    <MathRenderer text={formData.formula} block />
+                  </div>
+                )}
+
+                {formData.explanation && (
+                  <div className="rounded-xl border p-4">
+                    <h3 className="font-semibold mb-2">Explanation</h3>
+                    <MathRenderer text={formData.explanation} />
+                  </div>
+                )}
+
+                {formData.example && (
+                  <div className="rounded-xl border p-4">
+                    <h3 className="font-semibold mb-2">Example</h3>
+                    <MathRenderer text={formData.example} />
+                  </div>
+                )}
+
+                {!formData.title && (
+                  <p className="text-muted-foreground text-center">
+                    Start typing to see live preview
+                  </p>
+                )}
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
 
         {/* List */}
@@ -329,18 +389,13 @@ export default function AdminConcepts() {
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-primary" />
-              <h2 className="font-semibold text-lg">
-                Scheduled Concepts
-              </h2>
+              <h2 className="font-semibold text-lg">Scheduled Concepts</h2>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">
                 Filter by Class:
               </span>
-              <Select
-                value={filterClass}
-                onValueChange={setFilterClass}
-              >
+              <Select value={filterClass} onValueChange={setFilterClass}>
                 <SelectTrigger className="h-8 w-[120px]">
                   <SelectValue placeholder="All" />
                 </SelectTrigger>
