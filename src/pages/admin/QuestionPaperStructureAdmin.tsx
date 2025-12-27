@@ -177,9 +177,8 @@ if (res.data.success && Array.isArray(res.data.structures)) {
               <div className="flex gap-4">
                 {p.pdf && (
   <a
-    href={`${p.pdf}?dl=1`}
-    target="_blank"
-    rel="noopener noreferrer"
+    href={`${p.pdf}?fl_attachment`}
+    download
     className="text-primary underline text-sm"
   >
     Download PDF
