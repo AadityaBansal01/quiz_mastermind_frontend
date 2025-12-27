@@ -177,7 +177,7 @@ if (res.data.success && Array.isArray(res.data.structures)) {
               <div className="flex gap-4">
                 {p.pdf && (
   <a
-    href={`http://localhost:5000${p.pdf}`}
+    href={p.pdf}
     target="_blank"
     rel="noopener noreferrer"
     className="text-primary underline text-sm"
@@ -185,6 +185,7 @@ if (res.data.success && Array.isArray(res.data.structures)) {
     View PDF
   </a>
 )}
+
 
                 <button
                   onClick={() => handleDelete(p._id)}
