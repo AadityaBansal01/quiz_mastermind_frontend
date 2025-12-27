@@ -752,7 +752,7 @@ export const bookAPI = {
 export const importantLetterAPI = {
   upload: async (data: FormData) => {
     const res = await fetch(
-      "http://localhost:5000/api/important-letters/upload",
+      `${API_BASE_URL}/important-letters/upload`,
       {
         method: "POST",
         headers: getHeaders(true, true),
@@ -764,7 +764,7 @@ export const importantLetterAPI = {
 
   getAllForAdmin: async () => {
     const res = await fetch(
-      "http://localhost:5000/api/important-letters/admin",
+      `${API_BASE_URL}/important-letters/admin`,
       {
         headers: getHeaders(),
       }
@@ -774,7 +774,7 @@ export const importantLetterAPI = {
 
   getForStudent: async () => {
     const res = await fetch(
-      "http://localhost:5000/api/important-letters/student",
+       `${API_BASE_URL}/important-letters/student`,
       {
         headers: getHeaders(),
       }
@@ -784,7 +784,7 @@ export const importantLetterAPI = {
 
   delete: async (id: string) => {
     const res = await fetch(
-      `http://localhost:5000/api/important-letters/${id}`,
+      `${API_BASE_URL}/important-letters/${id}`,
       {
         method: "DELETE",
         headers: getHeaders(),
@@ -797,7 +797,7 @@ export const importantLetterAPI = {
 export const paperStructureAPI = {
 upload: async (data: FormData) => {
   const res = await fetch(
-    "http://localhost:5000/api/paper-structure/create",
+     `${API_BASE_URL}/paper-structure/create`,
     {
       method: "POST",
       headers: getHeaders(true, true),
@@ -809,7 +809,7 @@ upload: async (data: FormData) => {
 
   getAllForAdmin: async () => {
     const res = await fetch(
-      "http://localhost:5000/api/paper-structure/admin",
+       `${API_BASE_URL}/paper-structure/admin`,
       {
         headers: getHeaders(),
       }
@@ -819,7 +819,7 @@ upload: async (data: FormData) => {
 
   delete: async (id: string) => {
     const res = await fetch(
-      `http://localhost:5000/api/paper-structure/${id}`,
+      `${API_BASE_URL}/paper-structure/${id}`,
       {
         method: "DELETE",
         headers: getHeaders(),
@@ -830,7 +830,7 @@ upload: async (data: FormData) => {
 
   getForStudent: async () => {
     const res = await fetch(
-      "http://localhost:5000/api/paper-structure/student",
+       `${API_BASE_URL}/paper-structure/student`,
       {
         headers: getHeaders(),
       }
@@ -851,7 +851,7 @@ export const modelPaperAPI = {
 
   upload: async (data: FormData) => {
     const res = await fetch(
-      "http://localhost:5000/api/model-papers/create",
+       `${API_BASE_URL}/model-papers/create`,
       {
         method: "POST",
         headers: getHeaders(true, true), // auth + multipart
@@ -863,7 +863,7 @@ export const modelPaperAPI = {
 
   getAllForAdmin: async () => {
     const res = await fetch(
-      "http://localhost:5000/api/model-papers/admin",
+      `${API_BASE_URL}/model-papers/admin`,
       {
         headers: getHeaders(),
       }
@@ -873,7 +873,7 @@ export const modelPaperAPI = {
 
  delete: async (id: string) => {
   const res = await fetch(
-    `http://localhost:5000/api/model-papers/admin/${id}`, // ✅
+    `${API_BASE_URL}/model-papers/admin/${id}`, // ✅
     {
       method: "DELETE",
       headers: getHeaders(),
@@ -886,7 +886,7 @@ export const modelPaperAPI = {
 
   getForStudent: async () => {
     const res = await fetch(
-      "http://localhost:5000/api/model-papers/student",
+      `${API_BASE_URL}/model-papers/student`,
       {
         headers: getHeaders(),
       }
