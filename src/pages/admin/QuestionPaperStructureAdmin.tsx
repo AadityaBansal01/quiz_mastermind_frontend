@@ -84,6 +84,42 @@ if (res.data.success && Array.isArray(res.data.structures)) {
     }
   };
 
+
+const handleDownload = async (id: string, name: string) => {
+  try {
+    const token = localStorage.getItem("mathquiz_token");
+
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/question-paper-structure/download/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Download failed");
+    }
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${name}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    toast.error("Failed to download PDF");
+  }
+};
+
+
+
   return (
     <div className="max-w-3xl mx-auto space-y-6">
       {/* Upload Card */}
@@ -175,14 +211,12 @@ if (res.data.success && Array.isArray(res.data.structures)) {
               </div>
 
               <div className="flex gap-4">
-                {p.pdf && (
-  <a
-    href={`${import.meta.env.VITE_API_BASE_URL}/question-paper-structure/download/${p._id}`}
-    className="text-primary underline text-sm"
-  >
-    Download PDF
-  </a>
-)}
+                <button
+  onClick={() => handleDownload(p._id, p.examName)}
+  className="text-primary underline text-sm"
+>
+  Download PDF
+</button>
 
 
                 <button
