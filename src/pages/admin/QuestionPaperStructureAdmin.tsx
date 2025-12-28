@@ -177,13 +177,12 @@ if (res.data.success && Array.isArray(res.data.structures)) {
               <div className="flex gap-4">
                 {p.pdf && (
   <a
-  href={p.pdf}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="text-primary underline text-sm"
->
-  View PDF
-</a>
+    href={p.pdf}
+    download
+    className="text-primary underline text-sm"
+  >
+    Download PDF
+  </a>
 )}
 
 
