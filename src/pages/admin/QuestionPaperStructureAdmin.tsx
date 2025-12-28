@@ -177,8 +177,7 @@ if (res.data.success && Array.isArray(res.data.structures)) {
               <div className="flex gap-4">
                 {p.pdf && (
   <a
-    href={p.pdf}
-    download
+    href={`${import.meta.env.VITE_API_BASE_URL}/question-paper-structure/download/${p._id}`}
     className="text-primary underline text-sm"
   >
     Download PDF
