@@ -90,7 +90,7 @@ const handleDownload = async (id: string, name: string) => {
     const token = localStorage.getItem("mathquiz_token");
 
     const res = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/question-paper-structure/download/${id}`,
+      `${import.meta.env.VITE_API_BASE_URL}/paper-structure/download/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
