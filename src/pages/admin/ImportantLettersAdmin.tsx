@@ -25,6 +25,37 @@ export default function ImportantLettersAdmin() {
 const [letters, setLetters] = useState<any[]>([]);
 
 
+
+const handleDownload = async (id: string, title: string) => {
+  try {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/important-letters/download/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("mathquiz_token")}`,
+        },
+      }
+    );
+
+    if (!res.ok) throw new Error("Download failed");
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${title}.pdf`;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  } catch {
+    toast.error("Failed to download PDF");
+  }
+};
+
+
+
+
   const handleSubmit = async () => {
     if (!title || !classValue || !file) {
       toast.error("Title, Class and PDF are required");
@@ -174,14 +205,12 @@ useEffect(() => {
         </div>
 
        <div className="flex gap-4 items-center">
-  <a
-    href={`http://localhost:5000${l.fileUrl}`}
-    target="_blank"
-    rel="noreferrer"
-    className="text-primary underline"
-  >
-    View PDF
-  </a>
+ <button
+  onClick={() => handleDownload(l._id, l.title)}
+  className="text-primary underline"
+>
+  View PDF
+</button>
 
   <button
     onClick={() => handleDelete(l._id)}
