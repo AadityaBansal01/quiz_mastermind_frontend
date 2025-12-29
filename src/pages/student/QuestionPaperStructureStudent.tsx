@@ -17,6 +17,44 @@ const [filterClass, setFilterClass] = useState<"" | "11" | "12">("");
     fetchStructures();
   }, []);
 
+
+const handleDownload = async (paperId: string, examName: string) => {
+  try {
+    const token = localStorage.getItem("mathquiz_token");
+
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/paper-structure/download/${paperId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Download failed");
+    }
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${examName}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    toast.error("Failed to download PDF");
+  }
+};
+
+
+
+
+
   const fetchStructures = async () => {
     try {
       const res = await paperStructureAPI.getForStudent();
@@ -164,15 +202,14 @@ const filteredPapers = papers
 
 
       {paper.pdf && (
-        <a
-  href={`${import.meta.env.VITE_API_BASE_URL}/paper-structure/download/${paper._id}`}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="inline-flex items-center gap-2 text-primary hover:underline text-sm"
->
-  <FileText size={16} />
-  View Question Paper PDF
-</a>
+  <button
+    onClick={() => handleDownload(paper._id, paper.examName)}
+    className="inline-flex items-center gap-2 text-primary hover:underline text-sm"
+  >
+    <FileText size={16} />
+    View Question Paper PDF
+  </button>
+)}
 
       )}
     </CardContent>
