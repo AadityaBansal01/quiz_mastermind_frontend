@@ -211,7 +211,7 @@ const filteredPapers = papers
   </button>
 )}
 
-      )}
+    
     </CardContent>
   </Card>
 ))}
