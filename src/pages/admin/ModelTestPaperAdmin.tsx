@@ -38,7 +38,7 @@ export default function ModelTestPaperAdmin() {
 const handleDownload = async (id: string, title: string) => {
   try {
     const res = await fetch(
-      `${import.meta.env.VITE_API_BASE_URL}/model-paper/download/${id}`,
+      `${import.meta.env.VITE_API_BASE_URL}/model-papers/download/${id}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("mathquiz_token")}`,
