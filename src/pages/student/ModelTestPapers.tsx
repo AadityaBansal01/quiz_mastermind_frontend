@@ -37,6 +37,32 @@ const [bookmarkedPapers, setBookmarkedPapers] = useState<string[]>([]);
     return true;
   });
 
+const handleDownload = async (id: string, title: string) => {
+  try {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/model-papers/download/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("mathquiz_token")}`,
+        },
+      }
+    );
+
+    if (!res.ok) throw new Error("Download failed");
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${title}.pdf`;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  } catch {
+    toast.error("Failed to download model test paper");
+  }
+};
 
 
 const loadBookmarks = async () => {
@@ -156,22 +182,21 @@ const toggleBookmark = async (paperId: string) => {
 </div>
 
 
+    
       {/* Bottom Row */}
-      <div className="flex justify-between items-center mt-4">
-        <p className="text-xs text-muted-foreground">
-          📄 Model Test Paper
-        </p>
+<div className="flex justify-between items-center mt-4">
+  <p className="text-xs text-muted-foreground">
+    📄 Model Test Paper • {paper.totalMarks} Marks • {paper.duration} min
+  </p>
 
-        <a
-          href={`http://localhost:5000${paper.pdf}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 text-primary font-medium hover:underline"
-        >
-          <FileText className="w-4 h-4" />
-          View PDF
-        </a>
-      </div>
+  <button
+    onClick={() => handleDownload(paper._id, paper.title)}
+    className="flex items-center gap-2 text-primary font-medium hover:underline"
+  >
+    <FileText className="w-4 h-4" />
+    View PDF
+  </button>
+</div>
     </CardContent>
   </Card>
 ))}
