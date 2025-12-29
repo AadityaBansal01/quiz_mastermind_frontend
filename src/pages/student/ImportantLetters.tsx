@@ -5,6 +5,7 @@ import { FileText, Download, Loader2 } from "lucide-react";
 import { importantLetterAPI } from "@/utils/api";
 import { Link } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { toast } from "sonner";
 interface ImportantLetter {
   _id: string;
   title: string;
@@ -20,6 +21,36 @@ export default function ImportantLetters() {
   useEffect(() => {
     loadLetters();
   }, []);
+
+const handleDownload = async (id: string, title: string) => {
+  try {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/important-letters/download/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("mathquiz_token")}`,
+        },
+      }
+    );
+
+    if (!res.ok) throw new Error("Download failed");
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${title}.pdf`;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  } catch {
+    toast.error("Failed to download PDF");
+  }
+};
+
+
+
 
   const loadLetters = async () => {
     try {
@@ -40,6 +71,10 @@ export default function ImportantLetters() {
     );
   }
 
+
+
+
+  
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       <div>
@@ -85,16 +120,15 @@ export default function ImportantLetters() {
                 <p className="text-sm">{letter.description}</p>
               )}
 
-              <Button variant="outline" asChild>
-                <a
-                  href={`http://localhost:5000${letter.fileUrl}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <Download className="mr-2 h-4 w-4" />
-                  View / Download PDF
-                </a>
-              </Button>
+              <Button
+  variant="outline"
+  onClick={() => handleDownload(letter._id, letter.title)}
+  className="flex items-center gap-2"
+>
+  <Download className="h-4 w-4" />
+  View PDF
+</Button>
+              
             </CardContent>
           </Card>
         ))
