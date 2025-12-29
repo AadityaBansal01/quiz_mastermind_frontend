@@ -33,6 +33,37 @@ export default function ModelTestPaperAdmin() {
     if (res.data.success) setPapers(res.data.papers);
   };
 
+
+
+const handleDownload = async (id: string, title: string) => {
+  try {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/model-paper/download/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("mathquiz_token")}`,
+        },
+      }
+    );
+
+    if (!res.ok) throw new Error("Download failed");
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${title}.pdf`;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    toast.error("Failed to download PDF");
+  }
+};
+
+
+
   const handleSubmit = async () => {
     if (!classValue || !title || !syllabusType || !difficulty || !marks || !duration || !file) {
       toast.error("All required fields must be filled");
@@ -153,15 +184,13 @@ export default function ModelTestPaperAdmin() {
                 </p>
               </div>
             <div className="flex items-center gap-4">
-  <a
-    href={`http://localhost:5000${p.pdf}`}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="text-primary hover:text-primary/80 transition"
-    title="View PDF"
-  >
-    <FileText className="w-5 h-5" />
-  </a>
+<button
+  onClick={() => handleDownload(p._id, p.title)}
+  className="text-primary hover:text-primary/80 transition"
+  title="View PDF"
+>
+  <FileText className="w-5 h-5" />
+</button>
 
   <button
     onClick={() => handleDelete(p._id)}
