@@ -165,14 +165,15 @@ const filteredPapers = papers
 
       {paper.pdf && (
         <a
-          href={`http://localhost:5000${paper.pdf}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-primary hover:underline text-sm"
-        >
-          <FileText size={16} />
-          View Question Paper PDF
-        </a>
+  href={`${import.meta.env.VITE_API_BASE_URL}/paper-structure/download/${paper._id}`}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-flex items-center gap-2 text-primary hover:underline text-sm"
+>
+  <FileText size={16} />
+  View Question Paper PDF
+</a>
+
       )}
     </CardContent>
   </Card>
