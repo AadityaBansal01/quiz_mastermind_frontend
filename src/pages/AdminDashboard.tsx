@@ -505,6 +505,21 @@ export default function AdminDashboard() {
 </Link>
 
 
+<Link to="/admin/solution-corner" className="block">
+  <div className="p-6 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all text-center">
+    <FileText className="w-8 h-8 mx-auto mb-3 text-primary-foreground" />
+    <h3 className="font-semibold text-primary-foreground mb-1">
+      Solution Corner
+    </h3>
+    <p className="text-sm text-primary-foreground/70">
+      Upload & manage solutions
+    </p>
+  </div>
+</Link>
+
+
+
+
             </div>
           </div>
         </div>

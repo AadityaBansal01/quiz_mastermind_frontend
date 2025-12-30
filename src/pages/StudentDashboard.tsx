@@ -476,6 +476,19 @@ export default function StudentDashboard() {
                       </div>
                     </div>
                   </Link>
+
+<Link to="/solutions" className="block">
+  <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
+    <div className="flex items-center gap-3 text-primary-foreground">
+      <FileText className="w-5 h-5" />
+      <span className="font-medium">Solution Corner</span>
+    </div>
+  </div>
+</Link>
+
+
+
+
                 </div>
         </div>
       </div>

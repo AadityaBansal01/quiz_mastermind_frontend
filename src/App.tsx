@@ -47,7 +47,8 @@ import QuestionPaperStructureStudent from "@/pages/student/QuestionPaperStructur
 import ModelTestPaperAdmin from "@/pages/admin/ModelTestPaperAdmin";
 import ModelTestPapersStudent from "@/pages/student/ModelTestPapers";   
 import StudentBookmarks from "@/pages/student/Bookmarks";
-
+import SolutionCornerAdmin from "@/pages/admin/SolutionCornerAdmin";
+import SolutionCorner from "@/pages/student/SolutionCorner";
 
 const queryClient = new QueryClient();
 
@@ -251,7 +252,14 @@ function AppRoutes() {
   }
 />
 
-
+<Route
+  path="/admin/solution-corner"
+  element={
+    <ProtectedRoute requiredRole="admin">
+      <AppLayout><SolutionCornerAdmin /></AppLayout>
+    </ProtectedRoute>
+  }
+/>
 
 
 <Route
@@ -363,7 +371,14 @@ function AppRoutes() {
     }
   />
 
-  
+  <Route
+  path="/solutions"
+  element={
+    <ProtectedRoute requiredRole="student">
+      <AppLayout><SolutionCorner /></AppLayout>
+    </ProtectedRoute>
+  }
+/>
 
 
 <Route
