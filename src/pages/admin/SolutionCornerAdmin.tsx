@@ -197,28 +197,52 @@ fetchSolutions();
 </p>
     </div>
 
-    <div className="flex gap-2">
-      <Button variant="outline" asChild>
-        <a
-          href={`${import.meta.env.VITE_API_BASE_URL.replace(
-            "/api",
-            ""
-          )}/${s.fileUrl}`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          View / Download
-        </a>
-      </Button>
+  <div className="flex gap-2">
+  <Button
+    variant="outline"
+    onClick={async () => {
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/solutions/download/${s._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("mathquiz_token")}`,
+            },
+          }
+        );
 
-      <Button
-        variant="destructive"
-        onClick={() => deleteSolution(s._id)}
-      >
-        Delete
-      </Button>
-    </div>
-  </div>
+        if (!res.ok) {
+          toast.error("Failed to download");
+          return;
+        }
+
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${s.title}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        window.URL.revokeObjectURL(url);
+      } catch (err) {
+        toast.error("Download error");
+      }
+    }}
+  >
+    View / Download
+  </Button>
+
+  <Button
+    variant="destructive"
+    onClick={() => deleteSolution(s._id)}
+  >
+    Delete
+  </Button>
+</div>
+</ div>
 ))}
 
       </CardContent>
