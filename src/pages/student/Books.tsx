@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Download, BookOpen } from "lucide-react";
-
+import { toast } from "sonner";
 interface Book {
   _id: string;
   class: number;
@@ -38,6 +38,35 @@ export default function BooksStudent() {
   useEffect(() => {
     loadBooks();
   }, []);
+
+const handleDownload = async (id: string, title: string) => {
+  try {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/books/download/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("mathquiz_token")}`,
+        },
+      }
+    );
+
+    if (!res.ok) throw new Error("Download failed");
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${title}.pdf`;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  } catch {
+    toast.error("Failed to download PDF");
+  }
+};
+
+
 
   const loadBooks = async () => {
     try {
@@ -164,16 +193,13 @@ export default function BooksStudent() {
                 </p>
               )}
 
-              <Button asChild className="w-full">
-                <a
-                  href={`http://localhost:5000/${book.fileUrl}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Download PDF
-                </a>
-              </Button>
+             <Button
+  className="w-full flex items-center gap-2"
+  onClick={() => handleDownload(book._id, book.title)}
+>
+  <Download className="w-4 h-4" />
+  Download PDF
+</Button>
             </CardContent>
           </Card>
         ))}
