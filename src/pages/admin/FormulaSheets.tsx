@@ -94,6 +94,37 @@ export default function FormulaSheetsAdmin() {
     }
   };
 
+
+
+const handleDownload = async (id: string, title: string) => {
+  try {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/formulas/download/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("mathquiz_token")}`,
+        },
+      }
+    );
+
+    if (!res.ok) throw new Error("Download failed");
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${title}.pdf`;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  } catch {
+    toast.error("Failed to download PDF");
+  }
+};
+
+
+
   // Delete
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this formula sheet?")) return;
@@ -202,15 +233,12 @@ export default function FormulaSheetsAdmin() {
               </div>
 
               <div className="flex gap-2">
-                <Button variant="outline" asChild>
-                  <a
-                    href={`http://localhost:5000/${s.fileUrl}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    View
-                  </a>
-                </Button>
+                <Button
+  variant="outline"
+  onClick={() => handleDownload(s._id, s.title)}
+>
+  View PDF
+</Button>
                 <Button
                   variant="destructive"
                   onClick={() => handleDelete(s._id)}
