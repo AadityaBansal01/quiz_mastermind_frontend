@@ -108,6 +108,7 @@ fetchSolutions();
   >
     <option value="all">All Types</option>
     <option value="pyq">PYQ</option>
+    <option value="ncert">NCERT</option>
     <option value="model-test">Model Test</option>
     <option value="practice">Practice</option>
   </select>
@@ -146,6 +147,7 @@ fetchSolutions();
     onChange={(e) => setType(e.target.value)}
   >
     <option value="pyq">PYQ Solution</option>
+    <option value="ncert">NCERT Solution</option>
     <option value="model-test">Model Test Solution</option>
     <option value="practice">Practice Solution</option>
   </select>
