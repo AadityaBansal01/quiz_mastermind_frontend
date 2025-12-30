@@ -120,7 +120,7 @@ const handleDelete = async (id: string) => {
   if (!confirm("Delete this PYQ?")) return;
 
   try {
-    await fetch( `${import.meta.env.VITE_API_BASE_URL}/pyqs/${id}`,, {
+    await fetch( `${import.meta.env.VITE_API_BASE_URL}/pyqs/${id}`, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("mathquiz_token")}`,
@@ -229,13 +229,13 @@ const handleDelete = async (id: string) => {
               </div>
               <div className="flex gap-2">
   <Button variant="outline" asChild>
-    <a
-      href={`http://localhost:5000/${pyq.fileUrl}`}
-      target="_blank"
-      rel="noreferrer"
-    >
-      Download
-    </a>
+   <a
+  href={`${import.meta.env.VITE_API_BASE_URL.replace("/api", "")}/${pyq.fileUrl}`}
+  target="_blank"
+  rel="noreferrer"
+>
+  Download
+</a>
   </Button>
 
   <Button
