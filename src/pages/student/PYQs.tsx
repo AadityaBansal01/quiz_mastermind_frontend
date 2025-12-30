@@ -173,15 +173,19 @@ const toggleBookmark = async (pyqId: string) => {
                   {pyq.chapter && ` • ${pyq.chapter}`}
                 </p>
 
-                <Button asChild className="w-full">
-                  <a
-                    href={`http://localhost:5000/${pyq.fileUrl}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Download PDF
-                  </a>
-                </Button>
+               <Button asChild className="w-full">
+  <a
+    href={`${import.meta.env.VITE_API_BASE_URL.replace(
+      "/api",
+      ""
+    )}/${pyq.fileUrl}`}
+    target="_blank"
+    rel="noreferrer"
+  >
+    Download PDF
+  </a>
+</Button>
+
               </CardContent>
             </Card>
           ))}
