@@ -51,6 +51,7 @@ export default function BooksAdmin() {
     fetchBooks();
   }, []);
 
+  
   // Upload
  const handleUpload = async () => {
  if (
@@ -101,6 +102,32 @@ formData.append("description", form.description || "");
   }
 };
 
+const handleDownload = async (id: string, title: string) => {
+  try {
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/books/download/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("mathquiz_token")}`,
+        },
+      }
+    );
+
+    if (!res.ok) throw new Error("Download failed");
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${title}.pdf`;
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+  } catch {
+    toast.error("Failed to download PDF");
+  }
+};
 
 
   // Delete
@@ -215,12 +242,21 @@ formData.append("description", form.description || "");
                   {b.chapter && ` • ${b.chapter}`}
                 </p>
               </div>
-              <Button
-                variant="destructive"
-                onClick={() => handleDelete(b._id)}
-              >
-                Delete
-              </Button>
+              <div className="flex gap-2">
+  <Button
+    variant="outline"
+    onClick={() => handleDownload(b._id, b.title)}
+  >
+    View PDF
+  </Button>
+
+  <Button
+    variant="destructive"
+    onClick={() => handleDelete(b._id)}
+  >
+    Delete
+  </Button>
+</div>
             </div>
           ))}
         </CardContent>
