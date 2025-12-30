@@ -73,16 +73,16 @@ export default function PYQAdmin() {
 try {
   const token = localStorage.getItem("mathquiz_token");
 
-  const response = await fetch(
-    "http://localhost:5000/api/pyqs/upload",
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: data,
-    }
-  );
+const response = await fetch(
+  `${import.meta.env.VITE_API_BASE_URL}/pyqs/upload`,
+  {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: data,
+  }
+);
 
   if (!response.ok) {
     const err = await response.json();
@@ -120,7 +120,7 @@ const handleDelete = async (id: string) => {
   if (!confirm("Delete this PYQ?")) return;
 
   try {
-    await fetch(`http://localhost:5000/api/pyqs/${id}`, {
+    await fetch( `${import.meta.env.VITE_API_BASE_URL}/pyqs/${id}`,, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("mathquiz_token")}`,
