@@ -362,6 +362,71 @@ export default function StudentDashboard() {
             Quick Actions
           </h2>
            <div className="space-y-3">
+
+   <Link to="/important-letters" className="block">
+                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
+                      <div className="flex items-center gap-3 text-primary-foreground">
+                        <FileText className="w-5 h-5" />
+                        <span className="font-medium">Important Letters</span>
+                      </div>
+                    </div>
+                  </Link>
+
+
+<Link
+                    to="/student/question-paper-structure"
+                    className="block"
+                  >
+                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
+                      <div className="flex items-center gap-3 text-primary-foreground">
+                        <FileText className="w-5 h-5" />
+                        <span className="font-medium">
+                          Question Paper Structure
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+
+   <Link to="/concept-of-day" className="block">
+                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
+                      <div className="flex items-center gap-3 text-primary-foreground">
+                        <BookOpen className="w-5 h-5" />
+                        <span className="font-medium">Concept of the Day</span>
+                      </div>
+                    </div>
+                  </Link>
+
+   <Link to="/formula-sheets" className="block">
+                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
+                      <div className="flex items-center gap-3 text-primary-foreground">
+                        <FileText className="w-5 h-5" />
+                        <span className="font-medium">Formula Sheets</span>
+                      </div>
+                    </div>
+                  </Link>
+
+
+  <Link to="/student/model-test-papers" className="block">
+                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
+                      <div className="flex items-center gap-3 text-primary-foreground">
+                        <ClipboardList className="w-5 h-5" />
+                        <span className="font-medium">Model Test Papers</span>
+                      </div>
+                    </div>
+                  </Link>
+
+  <Link to="/practice" className="block">
+                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
+                      <div className="flex items-center gap-3 text-primary-foreground">
+                        <BookOpen className="w-5 h-5" />
+                        <span className="font-medium">Practice Questions</span>
+                      </div>
+                    </div>
+                  </Link>
+
+
+
+
                   <Link to="/pyqs" className="block">
                     <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
                       <div className="flex items-center gap-3 text-primary-foreground">
@@ -373,40 +438,12 @@ export default function StudentDashboard() {
                     </div>
                   </Link>
 
-                  <Link to="/student/model-test-papers" className="block">
-                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
-                      <div className="flex items-center gap-3 text-primary-foreground">
-                        <ClipboardList className="w-5 h-5" />
-                        <span className="font-medium">Model Test Papers</span>
-                      </div>
-                    </div>
-                  </Link>
+                
 
-                  <Link to="/practice" className="block">
-                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
-                      <div className="flex items-center gap-3 text-primary-foreground">
-                        <BookOpen className="w-5 h-5" />
-                        <span className="font-medium">Practice Questions</span>
-                      </div>
-                    </div>
-                  </Link>
-                  <Link to="/concept-of-day" className="block">
-                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
-                      <div className="flex items-center gap-3 text-primary-foreground">
-                        <BookOpen className="w-5 h-5" />
-                        <span className="font-medium">Concept of the Day</span>
-                      </div>
-                    </div>
-                  </Link>
+                
+               
 
-                  <Link to="/formula-sheets" className="block">
-                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
-                      <div className="flex items-center gap-3 text-primary-foreground">
-                        <FileText className="w-5 h-5" />
-                        <span className="font-medium">Formula Sheets</span>
-                      </div>
-                    </div>
-                  </Link>
+               
 
                   <Link to="/analytics" className="block">
                     <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
@@ -416,14 +453,7 @@ export default function StudentDashboard() {
                       </div>
                     </div>
                   </Link>
-                  <Link to="/profile" className="block">
-                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
-                      <div className="flex items-center gap-3 text-primary-foreground">
-                        <User className="w-5 h-5" />
-                        <span className="font-medium">Edit Profile</span>
-                      </div>
-                    </div>
-                  </Link>
+                
 
                   <Link to="/qod-history" className="block">
                     <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
@@ -445,37 +475,11 @@ export default function StudentDashboard() {
                     </div>
                   </Link>
 
-                  <Link to="/important-letters" className="block">
-                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
-                      <div className="flex items-center gap-3 text-primary-foreground">
-                        <FileText className="w-5 h-5" />
-                        <span className="font-medium">Important Letters</span>
-                      </div>
-                    </div>
-                  </Link>
+               
 
-                  <Link
-                    to="/student/question-paper-structure"
-                    className="block"
-                  >
-                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
-                      <div className="flex items-center gap-3 text-primary-foreground">
-                        <FileText className="w-5 h-5" />
-                        <span className="font-medium">
-                          Question Paper Structure
-                        </span>
-                      </div>
-                    </div>
-                  </Link>
+                  
 
-                  <Link to="/student/bookmarks" className="block">
-                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
-                      <div className="flex items-center gap-3 text-primary-foreground">
-                        <Star className="w-5 h-5" />
-                        <span className="font-medium">My Bookmarks</span>
-                      </div>
-                    </div>
-                  </Link>
+                
 
 <Link to="/solutions" className="block">
   <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
@@ -487,6 +491,23 @@ export default function StudentDashboard() {
 </Link>
 
 
+  <Link to="/student/bookmarks" className="block">
+                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
+                      <div className="flex items-center gap-3 text-primary-foreground">
+                        <Star className="w-5 h-5" />
+                        <span className="font-medium">My Bookmarks</span>
+                      </div>
+                    </div>
+                  </Link>
+
+  <Link to="/profile" className="block">
+                    <div className="p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
+                      <div className="flex items-center gap-3 text-primary-foreground">
+                        <User className="w-5 h-5" />
+                        <span className="font-medium">Edit Profile</span>
+                      </div>
+                    </div>
+                  </Link>
 
 
                 </div>
