@@ -49,6 +49,9 @@ import ModelTestPapersStudent from "@/pages/student/ModelTestPapers";
 import StudentBookmarks from "@/pages/student/Bookmarks";
 import SolutionCornerAdmin from "@/pages/admin/SolutionCornerAdmin";
 import SolutionCorner from "@/pages/student/SolutionCorner";
+import ForgotPassword from "@/pages/ForgotPassword";
+import ResetPassword from "@/pages/ResetPassword";
+
 
 const queryClient = new QueryClient();
 
@@ -98,6 +101,20 @@ function AppRoutes() {
     path="/verify-otp"
     element={<AppLayout><VerifyOtp /></AppLayout>}
   />
+
+{/* FORGOT / RESET PASSWORD — public */}
+  <Route
+    path="/forgot-password"
+    element={<AppLayout><ForgotPassword /></AppLayout>}
+  />
+
+  <Route
+    path="/reset-password"
+    element={<AppLayout><ResetPassword /></AppLayout>}
+  />
+
+
+
 
   {/* ---------- STUDENT ROUTES ---------- */}
   <Route
