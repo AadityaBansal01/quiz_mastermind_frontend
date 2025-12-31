@@ -101,7 +101,19 @@ verifyOtp: async (data: { email?: string; mobile?: string; otp: string }) => {
 },
 
 
-
+// Reset password (Forgot Password)
+resetPassword: async (data: {
+  email: string;
+  otp: string;
+  newPassword: string;
+}) => {
+  const response = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+    method: "POST",
+    headers: getHeaders(false),
+    body: JSON.stringify(data),
+  });
+  return handleResponse(response);
+},
 
 
   // Get current user profile
