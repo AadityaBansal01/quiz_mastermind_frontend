@@ -311,6 +311,20 @@ const passwordStrength = getPasswordStrength(formData.password);
       placeholder="Re-enter password"
       required
     />
+
+<button
+                  type="button"
+                  onClick={() => setShowPassword((s) => !s)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
+                >
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5 text-muted-foreground" />
+                  ) : (
+                    <Eye className="w-5 h-5 text-muted-foreground" />
+                  )}
+                </button>
+
+
   </div>
 </div>
 
