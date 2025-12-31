@@ -33,6 +33,7 @@ export default function Register() {
     email: "",
     mobile: "",
     password: "",
+    confirmPassword: "",
     class: "" as "" | "11" | "12",
     rollNumber: "",
   });
@@ -61,7 +62,10 @@ export default function Register() {
       return;
     }
 
-  
+  if (formData.password !== formData.confirmPassword) {
+  setError("Passwords do not match.");
+  return;
+}
 
     setIsLoading(true);
 
@@ -263,10 +267,30 @@ export default function Register() {
               </div>
             </div>
 
-            {/* OTP method */}
+          
+
+<div>
+  <Label>Confirm Password</Label>
+  <div className="relative">
+    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+    <Input
+      type={showPassword ? "text" : "password"}
+      value={formData.confirmPassword}
+      onChange={(e) =>
+        setFormData({ ...formData, confirmPassword: e.target.value })
+      }
+      className="pl-12 pr-12 h-12 rounded-xl"
+      placeholder="Re-enter password"
+      required
+    />
+  </div>
+</div>
+
+  {/* OTP method */}
             <p className="text-sm text-muted-foreground mt-2">
-              OTP will be sent to your email address.
+              OTP will be sent once to verify your email address.
             </p>
+
 
             <Button
               type="submit"
