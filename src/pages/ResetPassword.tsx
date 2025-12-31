@@ -16,9 +16,21 @@ export default function ResetPassword() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  if (!email) {
-    return <p className="text-center mt-10">Invalid Access</p>;
-  }
+ if (!email) {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center">
+        <p className="mb-4">Session expired. Please start again.</p>
+        <button
+          onClick={() => navigate("/forgot-password")}
+          className="text-primary underline"
+        >
+          Go to Forgot Password
+        </button>
+      </div>
+    </div>
+  );
+}
 
   const handleReset = async () => {
     setLoading(true);
