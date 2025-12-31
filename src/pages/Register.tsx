@@ -27,6 +27,22 @@ import {
 import { toast } from "sonner";
 import { authAPI } from "@/utils/api";
 
+
+
+
+const getPasswordStrength = (password: string) => {
+  if (!password) return "";
+
+  const hasLetter = /[a-zA-Z]/.test(password);
+  const hasNumber = /\d/.test(password);
+
+  if (password.length < 6) return "Weak";
+  if (hasLetter && hasNumber) return "Strong";
+  return "Medium";
+};
+
+
+
 export default function Register() {
   const [formData, setFormData] = useState({
     name: "",
@@ -40,7 +56,7 @@ export default function Register() {
 
   const [isLoading, setIsLoading] = useState(false);
 
-
+const passwordStrength = getPasswordStrength(formData.password);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -267,7 +283,19 @@ export default function Register() {
               </div>
             </div>
 
-          
+          {formData.password && (
+  <p
+    className={`text-sm mt-1 ${
+      passwordStrength === "Strong"
+        ? "text-green-600"
+        : passwordStrength === "Medium"
+        ? "text-yellow-600"
+        : "text-red-600"
+    }`}
+  >
+    Password strength: {passwordStrength}
+  </p>
+)}
 
 <div>
   <Label>Confirm Password</Label>
