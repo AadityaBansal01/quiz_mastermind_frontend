@@ -182,6 +182,11 @@ export default function VerifyOtp() {
           </span>
         </p>
 
+<p className="text-center text-sm text-muted-foreground mb-4">
+  OTP expires in <strong>{timer}s</strong>
+</p>
+
+
         <p className="text-center text-sm text-muted-foreground mb-4">
           Wrong details?{" "}
           <button
