@@ -69,11 +69,17 @@ export default function VerifyOtp() {
   };
 
   // Backspace → previous
-  const handleKeyDown = (e: any, index: number) => {
-    if (e.key === "Backspace" && otp[index] === "" && index > 0) {
+ const handleKeyDown = (e: any, index: number) => {
+  if (e.key === "Backspace") {
+    if (otp[index]) {
+      const updated = [...otp];
+      updated[index] = "";
+      setOtp(updated);
+    } else if (index > 0) {
       inputRefs.current[index - 1]?.focus();
     }
-  };
+  }
+};
 
   // Paste full OTP
   const handlePaste = (e: any) => {
@@ -133,6 +139,10 @@ export default function VerifyOtp() {
     }
   };
 
+
+
+
+
   // RESEND OTP
   const handleResendOtp = async () => {
     if (!canResend) return;
@@ -156,13 +166,7 @@ export default function VerifyOtp() {
     }
   };
 
-  // AUTO VERIFY WHEN 6 DIGITS ENTERED
-  useEffect(() => {
-    const finalOtp = otp.join("");
-    if (finalOtp.length === 6) {
-      handleVerify();
-    }
-  }, [otp]);
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/10 px-4">
@@ -179,12 +183,12 @@ export default function VerifyOtp() {
         </p>
 
         <p className="text-center text-sm text-muted-foreground mb-4">
-          Wrong number?{" "}
+          Wrong details?{" "}
           <button
             onClick={() => navigate("/register")}
             className="text-primary underline"
           >
-            Change mobile number
+            Edit registration details
           </button>
         </p>
 
@@ -216,11 +220,7 @@ export default function VerifyOtp() {
               value={digit}
               onChange={(e) => handleChange(e.target.value, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
-              onFocus={() => {
-                const firstEmpty = otp.findIndex((d) => d === "");
-                const target = firstEmpty === -1 ? 5 : firstEmpty;
-                inputRefs.current[target]?.focus();
-              }}
+              
               className={`
                 w-12 h-14 text-center text-2xl font-bold rounded-xl outline-none
                 transition-all duration-300
@@ -230,6 +230,19 @@ export default function VerifyOtp() {
             />
           ))}
         </div>
+
+<button
+  type="button"
+  onClick={() => {
+    setOtp(["", "", "", "", "", ""]);
+    inputRefs.current[0]?.focus();
+  }}
+  className="text-sm text-muted-foreground underline block mx-auto mb-4"
+>
+  Clear OTP
+</button>
+
+
 
         {/* VERIFY BUTTON */}
         <Button
