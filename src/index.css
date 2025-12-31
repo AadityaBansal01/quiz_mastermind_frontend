@@ -193,7 +193,22 @@
     60% { transform: translateX(-4px); }
     80% { transform: translateX(4px); }
   }
+@keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
 
+.animate-marquee {
+  display: inline-block;
+  white-space: nowrap;
+  animation: marquee 15s linear infinite;
+}
 
 
 }
+
+
