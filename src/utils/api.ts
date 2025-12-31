@@ -806,6 +806,57 @@ export const importantLetterAPI = {
   },
 };
 
+
+// ============================================
+// ANNOUNCEMENTS API
+// ============================================
+
+export const announcementAPI = {
+  // Student: get active announcement
+  getActive: async () => {
+    const res = await fetch(
+      `${API_BASE_URL}/announcements/active`,
+      {
+        method: "GET",
+        headers: getHeaders(),
+      }
+    );
+    return handleResponse(res);
+  },
+
+  // Admin: create announcement
+  create: async (data: {
+    message: string;
+    startDate: string;
+    endDate: string;
+  }) => {
+    const res = await fetch(
+      `${API_BASE_URL}/announcements`,
+      {
+        method: "POST",
+        headers: getHeaders(),
+        body: JSON.stringify(data),
+      }
+    );
+    return handleResponse(res);
+  },
+
+  // Admin: delete announcement
+  delete: async (id: string) => {
+    const res = await fetch(
+      `${API_BASE_URL}/announcements/${id}`,
+      {
+        method: "DELETE",
+        headers: getHeaders(),
+      }
+    );
+    return handleResponse(res);
+  },
+};
+
+
+
+
 export const paperStructureAPI = {
 upload: async (data: FormData) => {
   const res = await fetch(

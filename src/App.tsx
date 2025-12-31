@@ -51,7 +51,7 @@ import SolutionCornerAdmin from "@/pages/admin/SolutionCornerAdmin";
 import SolutionCorner from "@/pages/student/SolutionCorner";
 import ForgotPassword from "@/pages/ForgotPassword";
 import ResetPassword from "@/pages/ResetPassword";
-
+import AnnouncementManager from "@/pages/admin/AnnouncementManager";
 
 const queryClient = new QueryClient();
 
@@ -239,6 +239,18 @@ function AppRoutes() {
     <ProtectedRoute requiredRole="admin">
       <AppLayout>
         <AdminStudentDetails />
+      </AppLayout>
+    </ProtectedRoute>
+  }
+/>
+
+
+<Route
+  path="/admin/announcements"
+  element={
+    <ProtectedRoute requiredRole="admin">
+      <AppLayout>
+        <AnnouncementManager />
       </AppLayout>
     </ProtectedRoute>
   }
