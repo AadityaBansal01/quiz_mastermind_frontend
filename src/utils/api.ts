@@ -824,6 +824,21 @@ export const announcementAPI = {
     return handleResponse(res);
   },
 
+
+// Admin: get all announcements
+  getAllForAdmin: async () => {
+    const res = await fetch(
+      `${API_BASE_URL}/announcements/admin/all`,
+      {
+        method: "GET",
+        headers: getHeaders(), // admin auth required
+      }
+    );
+    return handleResponse(res);
+  },
+
+
+
   // Admin: create announcement
   create: async (data: {
     message: string;

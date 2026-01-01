@@ -24,36 +24,47 @@ export default function AnnouncementManager() {
   }, []);
 
   const loadAnnouncements = async () => {
-    try {
-      const res = await announcementAPI.getActive();
-      if (res.data.success && res.data.announcement) {
-        setAnnouncements([res.data.announcement]);
-      }
-    } catch {
-      // silent
+  try {
+    const res = await announcementAPI.getAllForAdmin();
+    if (res.data.success) {
+      setAnnouncements(res.data.announcements);
     }
-  };
+  } catch {
+    toast.error("Failed to load announcements");
+  }
+};
 
   const handleCreate = async () => {
-    if (!message || !startDate || !endDate) {
-      toast.error("All fields are required");
-      return;
-    }
+  if (!message || !startDate || !endDate) {
+    toast.error("All fields are required");
+    return;
+  }
 
-    try {
-      setLoading(true);
-      await announcementAPI.create({ message, startDate, endDate });
-      toast.success("Announcement created");
-      setMessage("");
-      setStartDate("");
-      setEndDate("");
-      loadAnnouncements();
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Failed");
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    setLoading(true);
+
+    const payload = {
+      message,
+      startDate: new Date(startDate + "T00:00:00"),
+      endDate: new Date(endDate + "T23:59:59"), // ✅ IMPORTANT
+    };
+
+    await announcementAPI.create(payload);
+
+    toast.success("Announcement created");
+
+    setMessage("");
+    setStartDate("");
+    setEndDate("");
+
+    loadAnnouncements();
+  } catch (err: any) {
+    toast.error(err?.response?.data?.message || "Failed");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleDelete = async (id: string) => {
     try {
@@ -111,12 +122,24 @@ export default function AnnouncementManager() {
               className="border p-4 rounded-lg flex justify-between items-start"
             >
               <div>
-                <p className="font-medium">{a.message}</p>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {new Date(a.startDate).toDateString()} →{" "}
-                  {new Date(a.endDate).toDateString()}
-                </p>
-              </div>
+  <p className="font-medium">{a.message}</p>
+
+  <p className="text-xs mt-1">
+    {new Date(a.startDate) <= new Date() &&
+    new Date(a.endDate) >= new Date() ? (
+      <span className="text-green-600 font-semibold">● Active</span>
+    ) : new Date(a.startDate) > new Date() ? (
+      <span className="text-blue-600 font-semibold">● Upcoming</span>
+    ) : (
+      <span className="text-red-600 font-semibold">● Expired</span>
+    )}
+  </p>
+
+  <p className="text-sm text-muted-foreground mt-1">
+    {new Date(a.startDate).toDateString()} →{" "}
+    {new Date(a.endDate).toDateString()}
+  </p>
+</div>
 
               <Button
                 variant="destructive"
