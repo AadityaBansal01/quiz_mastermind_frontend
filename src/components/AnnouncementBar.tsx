@@ -1,63 +1,58 @@
 import { useEffect, useState } from "react";
-import { authAPI } from "@/utils/api";
+import { announcementAPI } from "@/utils/api";
 
 export default function AnnouncementBar() {
-  const [announcement, setAnnouncement] = useState<any>(null);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    loadAnnouncement();
+    loadAnnouncements();
   }, []);
 
-  const loadAnnouncement = async () => {
-    try {
-      const res = await fetch(
-        "https://quiz-mastermind-backend.onrender.com/api/announcements/active",
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("mathquiz_token")}`,
-          },
-        }
-      );
+  useEffect(() => {
+    if (announcements.length <= 1) return;
 
-      const data = await res.json();
-      if (data.success) {
-        setAnnouncement(data.announcement);
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % announcements.length);
+    }, 6000); // rotate every 6 seconds
+
+    return () => clearInterval(timer);
+  }, [announcements]);
+
+  const loadAnnouncements = async () => {
+    try {
+      const res = await announcementAPI.getActive();
+      if (res.data.success) {
+        setAnnouncements(res.data.announcements || []);
       }
-    } catch (error) {
+    } catch {
       console.error("Announcement load failed");
     }
   };
 
-if (!announcement) return null;
+  if (announcements.length === 0) return null;
 
-return (
-  <div
-    className="
-      fixed
-      top-16
-      left-0
-      right-0
-      z-40
-      bg-gradient-to-r from-indigo-500 to-purple-600
-      text-white
-      overflow-hidden
-      h-10
-    "
-  >
+  const announcement = announcements[index];
+
+  return (
     <div
       className="
-        flex
-        items-center
-        h-full
-        whitespace-nowrap
-        animate-marquee
-        hover:[animation-play-state:paused]
+        fixed top-16 left-0 right-0 z-40
+        bg-gradient-to-r from-indigo-500 to-purple-600
+        text-white overflow-hidden h-10
       "
     >
-      <span className="mx-8 font-medium">
-        📢 {announcement.message}
-      </span>
+      <div
+        className="
+          flex items-center h-full whitespace-nowrap
+          animate-marquee
+          hover:[animation-play-state:paused]
+        "
+      >
+        <span className="mx-8 font-medium">
+          📢 {announcement.message}
+        </span>
+      </div>
     </div>
-  </div>
-);
+  );
 }
