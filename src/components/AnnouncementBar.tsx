@@ -28,13 +28,12 @@ export default function AnnouncementBar() {
     }
   };
 
-  if (!announcement) return null;
+if (!announcement) return null;
 
-  return (
-    <div className="bg-yellow-100 border-b border-yellow-300 py-2 overflow-hidden">
-      <div className="whitespace-nowrap animate-marquee text-yellow-900 font-medium px-4">
-        📢 {announcement.message}
-      </div>
+return (
+  <div className="w-full bg-yellow-100 border-b border-yellow-300 overflow-hidden">
+    <div className="animate-marquee py-2 px-4 text-yellow-900 font-medium">
+      📢 {announcement.message}
     </div>
-  );
-}
+  </div>
+);

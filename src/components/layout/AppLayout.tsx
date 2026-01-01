@@ -16,9 +16,10 @@ export default function AppLayout({ children }: { children: ReactNode }) {
 
       <Navbar />
 
-      <main className="pt-16 flex-1">
-        {children}
-      </main>
+    {/* Space for navbar + announcement */}
+<main className="pt-24 flex-1">
+  {children}
+</main>
 
       {/* Footer only for logged-out users */}
       {!user && <Footer />}
