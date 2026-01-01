@@ -10,6 +10,7 @@ interface Announcement {
   message: string;
   startDate: string;
   endDate: string;
+  isEnabled: boolean;
 }
 
 export default function AnnouncementManager() {
@@ -76,6 +77,20 @@ export default function AnnouncementManager() {
     }
   };
 
+
+const handleToggle = async (id: string) => {
+  try {
+    await announcementAPI.toggle(id);
+    toast.success("Announcement status updated");
+    loadAnnouncements(); // refresh list
+  } catch {
+    toast.error("Failed to update status");
+  }
+};
+
+
+
+
   return (
     <div className="max-w-4xl mx-auto px-6 py-10">
       <h1 className="text-2xl font-bold mb-6">📢 Announcement Manager</h1>
@@ -141,12 +156,26 @@ export default function AnnouncementManager() {
   </p>
 </div>
 
-              <Button
-                variant="destructive"
-                onClick={() => handleDelete(a._id)}
-              >
-                Delete
-              </Button>
+              <div className="flex gap-2">
+  <Button
+    variant="outline"
+    onClick={() => handleToggle(a._id)}
+    className={
+      a.isEnabled
+        ? "border-yellow-400 text-yellow-700"
+        : "border-green-400 text-green-700"
+    }
+  >
+    {a.isEnabled ? "Disable" : "Enable"}
+  </Button>
+
+  <Button
+    variant="destructive"
+    onClick={() => handleDelete(a._id)}
+  >
+    Delete
+  </Button>
+</div>
             </div>
           ))
         )}

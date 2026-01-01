@@ -825,6 +825,20 @@ export const announcementAPI = {
   },
 
 
+
+
+
+  toggle: async (id: string) => {
+  const res = await fetch(
+    `${API_BASE_URL}/announcements/${id}/toggle`,
+    {
+      method: "PATCH",
+      headers: getHeaders(),
+    }
+  );
+  return handleResponse(res);
+},
+
 // Admin: get all announcements
   getAllForAdmin: async () => {
     const res = await fetch(
