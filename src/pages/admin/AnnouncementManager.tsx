@@ -74,7 +74,7 @@ setSelectedClass("");
     try {
       await announcementAPI.delete(id);
       toast.success("Announcement deleted");
-      setAnnouncements([]);
+      loadAnnouncements();
     } catch {
       toast.error("Delete failed");
     }
