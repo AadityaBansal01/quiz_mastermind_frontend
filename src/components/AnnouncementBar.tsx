@@ -31,9 +31,32 @@ export default function AnnouncementBar() {
 if (!announcement) return null;
 
 return (
-  <div className="w-full bg-yellow-100 border-b border-yellow-300 overflow-hidden">
-    <div className="animate-marquee py-2 px-4 text-yellow-900 font-medium">
-      📢 {announcement.message}
+  <div
+    className="
+      fixed
+      top-16
+      left-0
+      right-0
+      z-40
+      bg-gradient-to-r from-indigo-500 to-purple-600
+      text-white
+      overflow-hidden
+      h-10
+    "
+  >
+    <div
+      className="
+        flex
+        items-center
+        h-full
+        whitespace-nowrap
+        animate-marquee
+        hover:[animation-play-state:paused]
+      "
+    >
+      <span className="mx-8 font-medium">
+        📢 {announcement.message}
+      </span>
     </div>
   </div>
 );
