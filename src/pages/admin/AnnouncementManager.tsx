@@ -19,6 +19,7 @@ export default function AnnouncementManager() {
   const [endDate, setEndDate] = useState("");
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
   const [loading, setLoading] = useState(false);
+const [selectedClass, setSelectedClass] = useState<string>("");
 
   useEffect(() => {
     loadAnnouncements();
@@ -45,10 +46,11 @@ export default function AnnouncementManager() {
     setLoading(true);
 
     const payload = {
-      message,
-      startDate: new Date(startDate + "T00:00:00"),
-      endDate: new Date(endDate + "T23:59:59"), // ✅ IMPORTANT
-    };
+  message,
+  startDate: new Date(startDate + "T00:00:00"),
+  endDate: new Date(endDate + "T23:59:59"),
+  class: selectedClass ? Number(selectedClass) : null,
+};
 
     await announcementAPI.create(payload);
 
@@ -57,6 +59,7 @@ export default function AnnouncementManager() {
     setMessage("");
     setStartDate("");
     setEndDate("");
+setSelectedClass("");
 
     loadAnnouncements();
   } catch (err: any) {
@@ -105,6 +108,17 @@ const handleToggle = async (id: string) => {
           onChange={(e) => setMessage(e.target.value)}
           className="mb-4"
         />
+
+<select
+  value={selectedClass}
+  onChange={(e) => setSelectedClass(e.target.value)}
+  className="w-full mb-4 px-3 py-2 rounded-md border border-input bg-background"
+>
+  <option value="">All Classes</option>
+  <option value="11">Class 11</option>
+  <option value="12">Class 12</option>
+</select>
+
 
         <div className="grid grid-cols-2 gap-4 mb-4">
           <Input

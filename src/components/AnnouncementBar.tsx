@@ -40,7 +40,7 @@ export default function AnnouncementBar() {
         {[...announcements, ...announcements].map((a, index) => (
           <span
             key={index}
-            className="mx-10 font-medium"
+            className="mx-20 font-medium"
           >
             📢 {a.message}
           </span>
