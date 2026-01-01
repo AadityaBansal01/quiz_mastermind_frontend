@@ -3,21 +3,10 @@ import { announcementAPI } from "@/utils/api";
 
 export default function AnnouncementBar() {
   const [announcements, setAnnouncements] = useState<any[]>([]);
-  const [index, setIndex] = useState(0);
 
   useEffect(() => {
     loadAnnouncements();
   }, []);
-
-  useEffect(() => {
-    if (announcements.length <= 1) return;
-
-    const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % announcements.length);
-    }, 6000); // rotate every 6 seconds
-
-    return () => clearInterval(timer);
-  }, [announcements]);
 
   const loadAnnouncements = async () => {
     try {
@@ -31,8 +20,6 @@ export default function AnnouncementBar() {
   };
 
   if (announcements.length === 0) return null;
-
-  const announcement = announcements[index];
 
   return (
     <div
@@ -49,9 +36,15 @@ export default function AnnouncementBar() {
           hover:[animation-play-state:paused]
         "
       >
-        <span className="mx-8 font-medium">
-          📢 {announcement.message}
-        </span>
+        {/* Repeat announcements twice for seamless loop */}
+        {[...announcements, ...announcements].map((a, index) => (
+          <span
+            key={index}
+            className="mx-10 font-medium"
+          >
+            📢 {a.message}
+          </span>
+        ))}
       </div>
     </div>
   );
