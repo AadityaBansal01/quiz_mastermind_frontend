@@ -37,7 +37,15 @@ const handleDownload = async (id: string, title: string) => {
       }
     );
 
-    if (!res.ok) throw new Error("Download failed");
+    // 🔴 HANDLE BACKEND ERROR MESSAGE
+    if (!res.ok) {
+      let errorMessage = "Failed to download PDF";
+      try {
+        const data = await res.json();
+        errorMessage = data?.message || errorMessage;
+      } catch {}
+      throw new Error(errorMessage);
+    }
 
     const blob = await res.blob();
     const url = window.URL.createObjectURL(blob);
@@ -45,11 +53,13 @@ const handleDownload = async (id: string, title: string) => {
     const a = document.createElement("a");
     a.href = url;
     a.download = `${title}.pdf`;
+    document.body.appendChild(a);
     a.click();
+    a.remove();
 
     window.URL.revokeObjectURL(url);
-  } catch {
-    toast.error("Failed to download PDF");
+  } catch (err: any) {
+    toast.error(err.message || "Failed to download PDF");
   }
 };
 
