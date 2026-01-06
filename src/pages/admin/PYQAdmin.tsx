@@ -230,7 +230,7 @@ const handleDelete = async (id: string) => {
               <div className="flex gap-2">
   <Button variant="outline" asChild>
    <a
-  href={`${import.meta.env.VITE_API_BASE_URL.replace("/api", "")}/${pyq.fileUrl}`}
+  href={pyq.fileUrl}
   target="_blank"
   rel="noreferrer"
 >
