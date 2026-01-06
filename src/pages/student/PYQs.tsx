@@ -99,7 +99,39 @@ const toggleBookmark = async (pyqId: string) => {
 };
 
 
+const handleDownload = async (id: string, title: string) => {
+  try {
+    const token = localStorage.getItem("mathquiz_token");
 
+    const res = await fetch(
+      `${import.meta.env.VITE_API_BASE_URL}/pyqs/download/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data?.message || "Download failed");
+    }
+
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${title}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    window.URL.revokeObjectURL(url);
+  } catch (err: any) {
+    toast.error(err.message || "Failed to download PDF");
+  }
+};
 
 
 
@@ -173,17 +205,11 @@ const toggleBookmark = async (pyqId: string) => {
                   {pyq.chapter && ` • ${pyq.chapter}`}
                 </p>
 
-               <Button asChild className="w-full">
-  <a
-    href={`${import.meta.env.VITE_API_BASE_URL.replace(
-      "/api",
-      ""
-    )}/${pyq.fileUrl}`}
-    target="_blank"
-    rel="noreferrer"
-  >
-    Download PDF
-  </a>
+              <Button
+  className="w-full"
+  onClick={() => handleDownload(pyq._id, pyq.title)}
+>
+  Download PDF
 </Button>
 
               </CardContent>
