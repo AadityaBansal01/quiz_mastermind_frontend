@@ -228,16 +228,14 @@ const handleDelete = async (id: string) => {
                 </p>
               </div>
               <div className="flex gap-2">
-  <Button variant="outline" asChild>
-  <a
-  href={`${pyq.fileUrl}?response-content-type=application/pdf`}
-  target="_blank"
-  rel="noreferrer"
-  download
+  <Button
+  variant="outline"
+  onClick={() => {
+    window.location.href = `${import.meta.env.VITE_API_BASE_URL}/pyqs/download/${pyq._id}`;
+  }}
 >
   Download PDF
-</a>
-  </Button>
+</Button>
 
   <Button
     variant="destructive"
