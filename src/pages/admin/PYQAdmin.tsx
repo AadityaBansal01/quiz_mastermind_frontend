@@ -229,12 +229,13 @@ const handleDelete = async (id: string) => {
               </div>
               <div className="flex gap-2">
   <Button variant="outline" asChild>
-   <a
-  href={pyq.fileUrl}
+  <a
+  href={`${pyq.fileUrl}?response-content-type=application/pdf`}
   target="_blank"
   rel="noreferrer"
+  download
 >
-  Download
+  Download PDF
 </a>
   </Button>
 
